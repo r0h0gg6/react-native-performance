@@ -7,7 +7,7 @@ buildscript {
             jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:7.0.4'
+            classpath 'com.android.tools.build:gradle:8.7.2'
         }
     }
 }
@@ -47,23 +47,21 @@ def safeExtGet(prop, fallback) {
 def nodeModules = findNodeModules(projectDir)
 
 android {
-    compileSdkVersion safeExtGet('compileSdkVersion', 31)
-    buildToolsVersion safeExtGet('buildToolsVersion', "31.0.0")
+    compileSdkVersion safeExtGet('compileSdkVersion', 35)
+    buildToolsVersion safeExtGet('buildToolsVersion', "35.0.0")
 
     def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
-    if (agpVersion >= 7) {
-      namespace 'com.oblador.performance'
-    }
+    namespace 'com.oblador.performance'
 
     defaultConfig {
-        minSdkVersion safeExtGet('minSdkVersion', 21)
-        targetSdkVersion safeExtGet('targetSdkVersion', 31)
+        minSdkVersion safeExtGet('minSdkVersion', 24)
+        targetSdkVersion safeExtGet('targetSdkVersion', 35)
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         if (isNewArchitectureEnabled()) {
             var appProject = rootProject.allprojects.find {it.plugins.hasPlugin('com.android.application')}
             externalNativeBuild {
                 ndkBuild {
-                    arguments "APP_PLATFORM=android-21",
+                    arguments "APP_PLATFORM=android-35",
                             "APP_STL=c++_shared",
                             "NDK_TOOLCHAIN_VERSION=clang",
                             "GENERATED_SRC_DIR=${appProject.buildDir}/generated/source",
@@ -78,11 +76,9 @@ android {
         }
     }
 
-    if (agpVersion < 8) {
-      compileOptions {
-          sourceCompatibility JavaVersion.VERSION_1_8
-          targetCompatibility JavaVersion.VERSION_1_8
-      }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
